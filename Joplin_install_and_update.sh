@@ -78,7 +78,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(<~/.joplin/VERSION) != "$version" ]]; th
   if [[ "$AUTO_RESTART" -eq "1" ]]; then
     JOPLIN_PROC_NAME="Joplin\|joplin"
     # JOPLIN_PROC_NAME="Joplin.AppImage\|/usr/bin/joplin"
-    for PID in $(ps -ef | grep -e "$JOPLIN_PROC_NAME" | grep -v "Helper" | grep -v grep | awk '{print $2}'); do
+    for PID in $(ps -ef | grep -e "$JOPLIN_PROC_NAME" | grep -v "Helper" | grep -v grep | grep -v Joplin_install_and_update | awk '{print $2}'); do
       # TODO check the parent PID of each process here?
       # If the ppid = 1, then it's probably the master joplin process
       cmd="$(ps -p "$PID" -o args=)"
