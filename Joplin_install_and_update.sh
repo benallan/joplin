@@ -81,12 +81,13 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(<~/.joplin/VERSION) != "$version" ]]; th
     for PID in $(ps -ef | grep -e "$JOPLIN_PROC_NAME" | grep -v "Helper" | grep -v grep | grep -v Joplin_install_and_update | awk '{print $2}'); do
       # TODO check the parent PID of each process here?
       # If the ppid = 1, then it's probably the master joplin process
-      set +e
-      cmd="$(ps -p "$PID" -o args=)"
-      process_cmds+=("$cmd")
-      echo "Killing process $PID: $cmd"
-      kill "$PID"
-      set -e
+      cmd="$(ps -p "$PID" -o args= || true)"
+
+      if [[ $cmd ]]; then
+        process_cmds+=("$cmd")
+        echo "Killing process $PID: $cmd"
+        kill "$PID"
+      fi
     done
   fi
 
